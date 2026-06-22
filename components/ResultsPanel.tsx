@@ -6,14 +6,22 @@ type ResultsPanelProps = {
 
 export default function ResultsPanel({ results }: ResultsPanelProps) {
   return (
-    <div className="ResultsPanelContainer">
+    <div className="resultsPanelContainer">
+      <div className="resultsPanelTitle">
+        <h2>Tailored bullets</h2>
+        <h3 className="subTitle">
+          <p>Original</p>
+          <p>Rewritten</p>
+        </h3>
+        
+      </div>
       {results.map((bullet, index) => (
-        <div key={index}>
+        <div key={index} className="resultRows">
           <p>
-            <strong>Original:</strong> {bullet.original}
+            <strong></strong> {bullet.original}
           </p>
           <p>
-            <strong>Rewritten:</strong> {bullet.rewritten}
+            <strong></strong> {bullet.rewritten}
           </p>
         </div>
       ))}

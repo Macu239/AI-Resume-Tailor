@@ -14,6 +14,23 @@ export default function Home() {
   const [results, setResults] = useState<BulletResult[]>([]);
   const [jobDescription, setJobDescription] = useState("");
   const [loading, setLoading] = useState(false);
+  const mockResults: BulletResult[] = [
+    {
+      original: "Worked on a web app using React and helped fix bugs",
+      rewritten:
+        "Shipped 12+ user-facing features for a React web app serving 5,000+ monthly users, cutting reported bugs by 40%.",
+    },
+    {
+      original: "Did a group project where we built a database for a class",
+      rewritten:
+        "Designed a normalized PostgreSQL schema for a 4-person project, reducing average query latency by 60%.",
+    },
+    {
+      original: "Interned at a startup and wrote some Python scripts",
+      rewritten:
+        "Automated ETL pipeline tasks in Python during a summer internship, saving the team ~10 engineering hours per week.",
+    },
+  ];
 
   async function handleSubmit() {
     setLoading(true);
@@ -37,14 +54,23 @@ export default function Home() {
 
   return (
     <main className="mainContainer">
-      <h1>Tailor your resume with AI</h1>
-      <ResumeInput value={resume} onChange={setResume} />
-      <JobDescriptionInput
-        value={jobDescription}
-        onChange={setJobDescription}
-      />
+      <div className="titleText">
+        <h1 className="title">Tailor your bullets to the job.</h1>
+        <p className="description">
+          Paste your resume bullets and the job description. Get back sharper,
+          quantified writing aligned to the role.
+        </p>
+      </div>
+      <div className="inputContainer">
+        <ResumeInput value={resume} onChange={setResume} />
+        <JobDescriptionInput
+          value={jobDescription}
+          onChange={setJobDescription}
+        />
+      </div>
+
       <SubmitBtn onClick={handleSubmit} loading={loading} />
-      <ResultsPanel results={results} />
+      <ResultsPanel results={mockResults} />
     </main>
   );
 }

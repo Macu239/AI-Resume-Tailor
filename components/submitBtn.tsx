@@ -8,7 +8,7 @@ export default function SubmitBtn({
   loading: boolean;
 }) {
   return (
-    <button onClick={onClick} disabled={loading}>
+    <button onClick={onClick} disabled={loading} className="SubmitBtn">
       {loading ? "Tailoring..." : "Tailor Resume"}
     </button>
   );
