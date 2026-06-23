@@ -1,24 +1,42 @@
-.ResumeInputContainer{
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    border-radius: 8px 0px 0px 8px;
-    border: 1px solid #e5e7eb;
-    padding: 1rem;
+.ResumeInputContainer {
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+}
+
+.ResumeInputContainer .inputLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .ResumeInputContainer label {
-    width: 100%;
-    font-size: 1rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-soft);
+}
+
+.ResumeInputContainer .inputMeta {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  color: var(--text-faint);
 }
 
 .ResumeInputContainer textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border-radius: 4px;
-    font-size: 1rem;
+  width: 100%;
+  min-height: 188px;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--text);
+}
+
+.ResumeInputContainer textarea::placeholder {
+  color: var(--text-faint);
 }

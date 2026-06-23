@@ -10,12 +10,14 @@ type ResumeInputProps = {
 export default function ResumeInput({ value, onChange }: ResumeInputProps) {
   return (
     <div className="ResumeInputContainer">
-      <label>Paste your resume bullets</label>
+      <div className="inputLabelRow">
+        <label>Resume bullets</label>
+        <span className="inputMeta">one per line</span>
+      </div>
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="- Led a team of 5 engineers..."
-        rows={10}
       />
     </div>
   );
