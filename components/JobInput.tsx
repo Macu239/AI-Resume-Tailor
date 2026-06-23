@@ -10,12 +10,14 @@ export default function JobDescriptionInput({
 }) {
   return (
     <div className="JobInputContainer">
-      <label>Paste the job description</label>
+      <div className="inputLabelRow">
+        <label>Job description</label>
+        <span className="inputMeta">paste full text</span>
+      </div>
       <textarea
         placeholder="Paste the job description..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        rows={10}
       />
     </div>
   );

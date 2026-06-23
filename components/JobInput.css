@@ -1,24 +1,42 @@
 .JobInputContainer {
-  width: 50%;
+  background: var(--surface);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  border-radius: 0 8px 8px 0;
-  border: 1px solid #e5e7eb;
-  padding: 1rem;
+  padding: 18px;
+}
+
+.JobInputContainer .inputLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .JobInputContainer label {
-  width: 100%;
-  font-size: 1rem;
+  font-size: 13px;
   font-weight: 500;
-  margin-bottom: 0.5rem;
+  color: var(--text-soft);
+}
+
+.JobInputContainer .inputMeta {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  color: var(--text-faint);
 }
 
 .JobInputContainer textarea {
   width: 100%;
-  padding: 0.5rem;
-  border-radius: 4px;
-  font-size: 1rem;
+  min-height: 188px;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--text);
+}
+
+.JobInputContainer textarea::placeholder {
+  color: var(--text-faint);
 }
