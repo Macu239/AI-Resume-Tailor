@@ -1,7 +1,22 @@
-.SubmitBtn{
-    background-color: var(--BtnColor);
-    color: var(--BtnTextColor);
-    border-radius: 8px;
-    padding: 0.75rem 1.5rem;
-    align-self: flex-start;
+.SubmitBtn {
+  background-color: var(--btn);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 17px;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 450;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background-color 0.15s ease;
+}
+
+.SubmitBtn:hover:not(:disabled) {
+  background-color: var(--btn-hover);
+}
+
+.SubmitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

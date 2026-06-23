@@ -3,13 +3,15 @@ import "./submitBtn.css";
 export default function SubmitBtn({
   onClick,
   loading,
+  label,
 }: {
   onClick: () => void;
   loading: boolean;
+  label?: string;
 }) {
   return (
     <button onClick={onClick} disabled={loading} className="SubmitBtn">
-      {loading ? "Tailoring..." : "Tailor Resume"}
+      {label ?? (loading ? "Tailoring..." : "Tailor bullets")}
     </button>
   );
 }
