@@ -1,19 +1,22 @@
 "use client";
-import Image from "next/image";
 import {
   ResumeInput,
   JobDescriptionInput,
   ResultsPanel,
   SubmitBtn,
+  LoadingSpinner,
 } from "../components";
 import { BulletResult } from "@/types";
 import { useState } from "react";
+import "./page.css";
 
 export default function Home() {
   const [resume, setResume] = useState("");
   const [results, setResults] = useState<BulletResult[]>([]);
   const [jobDescription, setJobDescription] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [refinement, setRefinement] = useState("");
+  const [refining, setRefining] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "done">("done");
   const mockResults: BulletResult[] = [
     {
       original: "Worked on a web app using React and helped fix bugs",
@@ -33,27 +36,45 @@ export default function Home() {
   ];
 
   async function handleSubmit() {
-    setLoading(true);
-    const reponse = await fetch("/api/tailor", {
+    setStatus("loading");
+    const response = await fetch("/api/tailor", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        resume,
-        jobDescription,
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ resume, jobDescription }),
     });
 
-    const data = await reponse.json();
-    console.log(data);
-    setResults(data.bullets);
-
-    setLoading(false);
+    const data = await response.json();
+    setResults(data.results ?? []);
+    setStatus("done");
   }
+
+  async function handleRefine() {
+    setRefining(true);
+    const response = await fetch("/api/refine", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ results, instruction: refinement }),
+    });
+
+    const data = await response.json();
+    setResults(data.results ?? []);
+    setRefining(false);
+  }
+
+  const buttonLabel =
+    status === "loading"
+      ? "Tailoring..."
+      : status === "done" && (results?.length ?? 0) > 0
+        ? "Re-tailor"
+        : "Tailor bullets";
 
   return (
     <main className="mainContainer">
+      <div className="pageHeader">
+        <span className="headerDot" />
+        <span className="headerBrand">Resume Tailor</span>
+      </div>
+
       <div className="titleText">
         <h1 className="title">Tailor your bullets to the job.</h1>
         <p className="description">
@@ -61,6 +82,7 @@ export default function Home() {
           quantified writing aligned to the role.
         </p>
       </div>
+
       <div className="inputContainer">
         <ResumeInput value={resume} onChange={setResume} />
         <JobDescriptionInput
@@ -69,8 +91,25 @@ export default function Home() {
         />
       </div>
 
-      <SubmitBtn onClick={handleSubmit} loading={loading} />
-      <ResultsPanel results={mockResults} />
+      <div className="actionRow">
+        <SubmitBtn
+          onClick={handleSubmit}
+          loading={status === "loading"}
+          label={buttonLabel}
+        />
+        <span className="actionHint">results appear below</span>
+      </div>
+
+      {status === "loading" && <LoadingSpinner />}
+      {status === "done" && results.length > 0 && (
+        <ResultsPanel
+          results={results}
+          refinement={refinement}
+          onRefinementChange={setRefinement}
+          onRefine={handleRefine}
+          refining={refining}
+        />
+      )}
     </main>
   );
 }
