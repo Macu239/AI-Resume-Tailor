@@ -8,6 +8,11 @@ export type BulletResult = {
   rewritten: string
 }
 
+export type refineResult = {
+  results: BulletResult[]
+  instruction: string
+}
+
 export type TailorResponse = {
-  bullets: BulletResult[]
+  results: BulletResult[]
 }
