@@ -11,7 +11,7 @@ export default function ResumeInput({ value, onChange }: ResumeInputProps) {
   return (
     <div className="ResumeInputContainer">
       <div className="inputLabelRow">
-        <label>Resume bullets</label>
+        <label>Resume Bullets</label>
         <span className="inputMeta">one per line</span>
       </div>
       <textarea

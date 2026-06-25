@@ -11,7 +11,7 @@ export default function JobDescriptionInput({
   return (
     <div className="JobInputContainer">
       <div className="inputLabelRow">
-        <label>Job description</label>
+        <label>Job Description</label>
         <span className="inputMeta">paste full text</span>
       </div>
       <textarea
