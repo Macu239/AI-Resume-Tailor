@@ -19,7 +19,7 @@ const config: Record<Tab, { label: string; meta: string; placeholder: string }> 
     meta: "1-3 sentences",
     placeholder: "Experienced software engineer with 3+ years building...",
   },
-  cv: {
+  coverLetter: {
     label: "Whole Resume",
     meta: "paste full Resume",
     placeholder: "Paste your full Resume here...",

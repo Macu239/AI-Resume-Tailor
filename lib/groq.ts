@@ -18,6 +18,7 @@ function parseJSON(content: string) {
 export async function tailorBullets(resume: string, jobDescription: string) {
   const response = await client.chat.completions.create({
     model: "llama-3.3-70b-versatile",
+    response_format: { type: "json_object" },
     messages: [
       {
         role: "system",
@@ -54,6 +55,7 @@ export async function refineBullet(
 ) {
   const response = await client.chat.completions.create({
     model: "llama-3.3-70b-versatile",
+    response_format: { type: "json_object" },
     messages: [
       {
         role: "system",
@@ -85,6 +87,7 @@ Only return JSON, no extra text.`,
 export async function tailorSummary(resume: string, jobDescription: string) {
   const response = await client.chat.completions.create({
     model: "llama-3.3-70b-versatile",
+    response_format: { type: "json_object" },
     messages: [
       {
         role: "system",
@@ -112,12 +115,10 @@ Only return JSON, no extra text.`,
   return parseJSON(content);
 }
 
-export async function refineSummary(
-  result: TailorResult,
-  instruction: string,
-) {
+export async function refineSummary(result: TailorResult, instruction: string) {
   const response = await client.chat.completions.create({
     model: "llama-3.3-70b-versatile",
+    response_format: { type: "json_object" },
     messages: [
       {
         role: "system",
@@ -143,9 +144,13 @@ Only return JSON, no extra text.`,
 }
 
 //Cover Letter
-export async function tailorCoverLetter(resume: string, jobDescription: string) {
+export async function tailorCoverLetter(
+  resume: string,
+  jobDescription: string,
+) {
   const response = await client.chat.completions.create({
     model: "llama-3.3-70b-versatile",
+    response_format: { type: "json_object" },
     messages: [
       {
         role: "system",
@@ -174,9 +179,13 @@ Only return JSON, no extra text.`,
   return parseJSON(content);
 }
 
-export async function refineCoverLetter(result: TailorResult, instruction: string) {
+export async function refineCoverLetter(
+  result: TailorResult,
+  instruction: string,
+) {
   const response = await client.chat.completions.create({
     model: "llama-3.3-70b-versatile",
+    response_format: { type: "json_object" },
     messages: [
       {
         role: "system",
