@@ -1,9 +1,10 @@
 "use client";
 import { useState, useCallback } from "react";
-import "./ResultsPanel.css";
+import { TailorResult } from "@/types";
+import "./BulletOutPutPanel.css";
 
 type ResultsPanelProps = {
-  results: { original: string; rewritten: string }[];
+  results: TailorResult[];
   refinement: string;
   onRefinementChange: (value: string) => void;
   onRefine: () => void;
