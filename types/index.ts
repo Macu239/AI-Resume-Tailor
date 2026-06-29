@@ -1,18 +1,20 @@
 export type TailorRequest = {
-  resume: string
-  jobDescription: string
-}
+  resume: string;
+  jobDescription: string;
+};
 
-export type BulletResult = {
-  original: string
-  rewritten: string
-}
+export type TailorResult = {
+  original: string;
+  rewritten: string;
+};
 
-export type refineResult = {
-  results: BulletResult[]
-  instruction: string
-}
+export type RefineRequest = {
+  results: TailorResult[];
+  instruction: string;
+};
 
-export type TailorResponse = {
-  results: BulletResult[]
-}
+export type TailorProps = {
+  jobDescription: string;
+};
+
+export type Tab = "bullet" | "cv" | "summary";

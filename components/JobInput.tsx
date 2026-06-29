@@ -1,13 +1,11 @@
 import "./JobInput.css";
-import { useState } from "react";
 
-export default function JobDescriptionInput({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (value: string) => void;
-}) {
+type JobDescriptionInputProps = {
+  jobDescription: string;
+  setJobDescription: (value: string) => void;
+};
+
+export default function JobDescriptionInput({ jobDescription, setJobDescription }: JobDescriptionInputProps) {
   return (
     <div className="JobInputContainer">
       <div className="inputLabelRow">
@@ -16,8 +14,8 @@ export default function JobDescriptionInput({
       </div>
       <textarea
         placeholder="Paste the job description..."
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        value={jobDescription}
+        onChange={(e) => setJobDescription(e.target.value)}
       />
     </div>
   );

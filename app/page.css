@@ -20,15 +20,3 @@
   color: var(--text);
 }
 
-.actionRow {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 0;
-}
-
-.actionHint {
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 12px;
-  color: var(--text-faint);
-}
