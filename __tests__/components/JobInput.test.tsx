@@ -6,18 +6,18 @@ describe("JobDescriptionInput", () => {
   afterEach(() => cleanup());
 
   it("renders the input field", () => {
-    render(<JobDescriptionInput value="" onChange={vi.fn()} />);
+    render(<JobDescriptionInput jobDescription="" setJobDescription={vi.fn()} />);
     expect(screen.getByRole("textbox")).toBeDefined();
   });
 
   it("renders the label", () => {
-    render(<JobDescriptionInput value="" onChange={vi.fn()} />);
+    render(<JobDescriptionInput jobDescription="" setJobDescription={vi.fn()} />);
     expect(screen.getByText("Job Description")).toBeDefined();
   });
 
   it("calls the onChange handler when the input value changes", () => {
     const handleChange = vi.fn();
-    render(<JobDescriptionInput value="" onChange={handleChange} />);
+    render(<JobDescriptionInput jobDescription="" setJobDescription={handleChange} />);
     const input = "We need a SWE";
     fireEvent.change(screen.getByRole("textbox"), { target: { value: input } });
     expect(handleChange).toHaveBeenCalledWith(input);
