@@ -4,8 +4,8 @@ import {
   refineBullet,
   tailorSummary,
   refineSummary,
-  tailorCV,
-  refineCV,
+  tailorCoverLetter,
+  refineCoverLetter,
 } from "@/lib/groq";
 import { TailorResult } from "@/types";
 
@@ -95,25 +95,25 @@ describe("refineSummary", () => {
   });
 });
 
-describe("tailorCV", () => {
+describe("tailorCoverLetter", () => {
   it("returns parsed result", async () => {
     const payload = { result: { original: "my resume", rewritten: "cover letter" } };
     mockCreate.mockResolvedValue(mockResponse(JSON.stringify(payload)));
 
-    const result = await tailorCV("my resume", "job desc");
+    const result = await tailorCoverLetter("my resume", "job desc");
 
     expect(result).toEqual(payload);
     expect(mockCreate).toHaveBeenCalledOnce();
   });
 });
 
-describe("refineCV", () => {
+describe("refineCoverLetter", () => {
   it("returns refined result", async () => {
     const previous: TailorResult = { original: "my resume", rewritten: "cover letter" };
     const payload = { result: { original: "my resume", rewritten: "refined cover letter" } };
     mockCreate.mockResolvedValue(mockResponse(JSON.stringify(payload)));
 
-    const result = await refineCV(previous, "More formal tone");
+    const result = await refineCoverLetter(previous, "More formal tone");
 
     expect(result).toEqual(payload);
     expect(mockCreate).toHaveBeenCalledOnce();

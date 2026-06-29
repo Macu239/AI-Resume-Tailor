@@ -1,7 +1,7 @@
 "use client";
 import {
   ResumeInput,
-  PargraphOutPutPannel,
+  ParagraphOutPutPanel,
   SubmitBtn,
   LoadingSpinner,
 } from "@/components";
@@ -9,16 +9,13 @@ import { TailorProps, TailorResult } from "@/types";
 import { useState } from "react";
 import "./Cv.css";
 
-export default function CvTrailor({ jobDescription }: TailorProps) {
+export default function CoverLetterTailor({ jobDescription }: TailorProps) {
   const [resume, setResume] = useState("");
   const [result, setResult] = useState<TailorResult | null>(null);
   const [refinement, setRefinement] = useState("");
   const [refining, setRefining] = useState(false);
-  const [status, setStatus] = useState<"idle" | "loading" | "done">("done");
-  const mockResult: TailorResult = {
-    original: "I want a job",
-    rewritten: "I love your company and i am a good employee.",
-  };
+  const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
+
   async function handleSubmit() {
     setStatus("loading");
     const response = await fetch("/api/tailor-cv", {
@@ -47,20 +44,22 @@ export default function CvTrailor({ jobDescription }: TailorProps) {
 
   const buttonLabel =
     status === "loading"
-      ? "Tailoring..."
+      ? "Generating..."
       : status === "done" && result != null
-        ? "Re-tailor"
-        : "Generate CV";
+        ? "Regenerate"
+        : "Generate Cover Letter";
+
   return (
     <div>
       <div className="titleText">
-        <h1 className="title">Making your CV to fit the job</h1>
+        <h1 className="title">Write a cover letter for the job.</h1>
         <p className="description">
-          Paste your resume bullets and the job description. Get back CV to send with the Resume.
+          Paste your resume and the job description. Get back a tailored cover
+          letter that draws from your real experience.
         </p>
       </div>
 
-      <ResumeInput value={resume} onChange={setResume} mode="cv" />
+      <ResumeInput value={resume} onChange={setResume} mode="coverLetter" />
 
       <div className="actionRow">
         <SubmitBtn
@@ -73,13 +72,13 @@ export default function CvTrailor({ jobDescription }: TailorProps) {
 
       {status === "loading" && <LoadingSpinner />}
       {status === "done" && result !== null && (
-        <PargraphOutPutPannel
+        <ParagraphOutPutPanel
           result={result}
           refinement={refinement}
           onRefinementChange={setRefinement}
           onRefine={handleRefine}
           refining={refining}
-          mode="cv"
+          mode="coverLetter"
         />
       )}
     </div>

@@ -7,4 +7,4 @@ export { default as BulletTailor } from "./BulletTailor";
 export { default as TabBar } from "./TabBar";
 export { default as CvTailor } from "./CvTailor";
 export { default as SummaryTailor } from "./SummaryTailor";
-export { default as PargraphOutPutPannel} from "./ParagraphOutPutPanel"
+export { default as ParagraphOutPutPanel } from "./ParagraphOutPutPanel"

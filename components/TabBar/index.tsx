@@ -18,12 +18,12 @@ export default function TabBar({ tool, setTool }: TabBarProps) {
         Bullet Tailor
       </button>
       <button
-        className={tool === "cv" ? "tab active" : "tab"}
+        className={tool === "coverLetter" ? "tab active" : "tab"}
         role="tab"
-        aria-selected={tool === "cv"}
-        onClick={() => setTool("cv")}
+        aria-selected={tool === "coverLetter"}
+        onClick={() => setTool("coverLetter")}
       >
-        CV Tailor
+        Cover Letter
       </button>
       <button
         className={tool === "summary" ? "tab active" : "tab"}

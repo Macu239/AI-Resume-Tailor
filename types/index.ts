@@ -17,4 +17,4 @@ export type TailorProps = {
   jobDescription: string;
 };
 
-export type Tab = "bullet" | "cv" | "summary";
+export type Tab = "bullet" | "coverLetter" | "summary";

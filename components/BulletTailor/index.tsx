@@ -14,24 +14,7 @@ export default function BulletTailor({ jobDescription }: TailorProps) {
   const [results, setResults] = useState<TailorResult[]>([]);
   const [refinement, setRefinement] = useState("");
   const [refining, setRefining] = useState(false);
-  const [status, setStatus] = useState<"idle" | "loading" | "done">("done");
-  const mockResults: TailorResult[] = [
-    {
-      original: "Worked on a web app using React and helped fix bugs",
-      rewritten:
-        "Shipped 12+ user-facing features for a React web app serving 5,000+ monthly users, cutting reported bugs by 40%.",
-    },
-    {
-      original: "Did a group project where we built a database for a class",
-      rewritten:
-        "Designed a normalized PostgreSQL schema for a 4-person project, reducing average query latency by 60%.",
-    },
-    {
-      original: "Interned at a startup and wrote some Python scripts",
-      rewritten:
-        "Automated ETL pipeline tasks in Python during a summer internship, saving the team ~10 engineering hours per week.",
-    },
-  ];
+  const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
 
   async function handleSubmit() {
     setStatus("loading");

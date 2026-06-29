@@ -1,7 +1,7 @@
 "use client";
 import {
   ResumeInput,
-  PargraphOutPutPannel,
+  ParagraphOutPutPanel,
   SubmitBtn,
   LoadingSpinner,
 } from "@/components";
@@ -14,11 +14,7 @@ export default function SummaryTailor({ jobDescription }: TailorProps) {
   const [result, setResult] = useState<TailorResult | null>(null);
   const [refinement, setRefinement] = useState("");
   const [refining, setRefining] = useState(false);
-  const [status, setStatus] = useState<"idle" | "loading" | "done">("done");
-  const mockResult: TailorResult = {
-    original: "I love SWE",
-    rewritten: "I am a passionate SWE",
-  };
+  const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
 
   async function handleSubmit() {
     setStatus("loading");
@@ -76,7 +72,7 @@ export default function SummaryTailor({ jobDescription }: TailorProps) {
       
       {status === "loading" && <LoadingSpinner />}
       {status === "done" && result !== null && (
-        <PargraphOutPutPannel
+        <ParagraphOutPutPanel
           result={result}
           refinement={refinement}
           onRefinementChange={setRefinement}

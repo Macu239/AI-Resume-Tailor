@@ -30,7 +30,7 @@ export default function Home() {
       <div style={{ display: tool === "bullet" ? "block" : "none" }}>
         <BulletTailor jobDescription={jobDescription} />
       </div>
-      <div style={{ display: tool === "cv" ? "block" : "none" }}>
+      <div style={{ display: tool === "coverLetter" ? "block" : "none" }}>
         <CvTailor jobDescription={jobDescription} />
       </div>
       <div style={{ display: tool === "summary" ? "block" : "none" }}>

@@ -1,4 +1,4 @@
-import { TailorResult,Tab } from "@/types";
+import { TailorResult, Tab } from "@/types";
 import { useState, useCallback } from "react";
 import "./ParagraphOutPutPanel.css";
 
@@ -8,24 +8,24 @@ type ParagraphOutPutPanelProps = {
   onRefinementChange: (value: string) => void;
   onRefine: () => void;
   refining: boolean;
-  mode:Tab;
+  mode: Tab;
 };
 
-const config: Record<Tab, { title: string, refinePlaceHolder:string,refineBtn:string }> = {
+const config: Record<Tab, { title: string; refinePlaceHolder: string; refineBtn: string }> = {
   bullet: {
-    title:"",
-    refinePlaceHolder :"",
-    refineBtn:""
+    title: "",
+    refinePlaceHolder: "",
+    refineBtn: "",
   },
   summary: {
-    title:"Tailored Summary:",
-    refinePlaceHolder :"Make sure to mention Javascript",
-    refineBtn:"Refine Summary"
+    title: "Tailored Summary:",
+    refinePlaceHolder: "Make sure to mention Javascript",
+    refineBtn: "Refine Summary",
   },
-  cv: {
-    title:"Tailored CV:",
-    refinePlaceHolder :"Highlight the GPA calculator",
-    refineBtn:"Refine CV"
+  coverLetter: {
+    title: "Tailored Cover Letter:",
+    refinePlaceHolder: "Highlight the GPA calculator",
+    refineBtn: "Refine Cover Letter",
   },
 };
 
@@ -35,7 +35,7 @@ export default function ParagraphOutPutPanel({
   onRefinementChange,
   onRefine,
   refining,
-  mode
+  mode,
 }: ParagraphOutPutPanelProps) {
   const [copied, setCopied] = useState<boolean | null>(null);
   const copy = useCallback((text: string) => {
@@ -43,7 +43,7 @@ export default function ParagraphOutPutPanel({
     setCopied(true);
     setTimeout(() => setCopied(null), 1300);
   }, []);
-  const {title, refinePlaceHolder, refineBtn} = config[mode]
+  const { title, refinePlaceHolder, refineBtn } = config[mode];
   return (
     <div className="ParagraphOutPutPanelContainer">
       <span className="ParagraphOutPutPanelTitle">{title}</span>
@@ -76,7 +76,7 @@ export default function ParagraphOutPutPanel({
             onClick={onRefine}
             disabled={refining || !refinement.trim()}
           >
-            {refining ? "Refining..." : `${refineBtn}`}
+            {refining ? "Refining..." : refineBtn}
           </button>
         </div>
       </div>
