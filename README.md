@@ -1,5 +1,7 @@
 # AI Resume Tailor
 
+Live: [ai-resumetailor.vercel.app](https://ai-resumetailor.vercel.app/)
+
 ## Why this exists
 
 Over the last summer I applied to a large number of jobs. For almost every application I found myself doing the same tedious loop: copy the job description, copy a resume bullet or summary, paste both into a general-purpose GenAI chat, ask it to tailor the wording, copy the result back out, repeat for every bullet, every summary, every cover letter, every job.
