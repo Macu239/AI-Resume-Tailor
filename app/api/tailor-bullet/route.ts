@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     }
 
     const body: TailorRequest = await request.json();
-    const result = await tailorBullets(body.resume, body.jobDescription);
+    const result = await tailorBullets(body.resume, body.jobDescription, body.language);
     return Response.json(result);
   } catch (err) {
     console.error("[tailor-bullet]", err);
