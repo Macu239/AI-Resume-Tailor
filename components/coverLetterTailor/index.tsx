@@ -6,22 +6,25 @@ import {
   LoadingSpinner,
 } from "@/components";
 import { TailorProps, TailorResult } from "@/types";
+import { translations } from "@/lib/translations";
 import { useState } from "react";
 import "./Cv.css";
 
-export default function CoverLetterTailor({ jobDescription }: TailorProps) {
+export default function CoverLetterTailor({ jobDescription, language }: TailorProps) {
   const [resume, setResume] = useState("");
   const [result, setResult] = useState<TailorResult | null>(null);
   const [refinement, setRefinement] = useState("");
   const [refining, setRefining] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
 
+  const text = translations[language].coverLetterTailor;
+
   async function handleSubmit() {
     setStatus("loading");
     const response = await fetch("/api/tailor-cv", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ resume, jobDescription }),
+      body: JSON.stringify({ resume, jobDescription, language }),
     });
 
     const data = await response.json();
@@ -34,7 +37,7 @@ export default function CoverLetterTailor({ jobDescription }: TailorProps) {
     const response = await fetch("/api/refine-cv", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ result, instruction: refinement }),
+      body: JSON.stringify({ result, instruction: refinement, language }),
     });
 
     const data = await response.json();
@@ -44,22 +47,19 @@ export default function CoverLetterTailor({ jobDescription }: TailorProps) {
 
   const buttonLabel =
     status === "loading"
-      ? "Generating..."
+      ? text.loadingLabel
       : status === "done" && result != null
-        ? "Regenerate"
-        : "Generate Cover Letter";
+        ? text.doneLabel
+        : text.idleLabel;
 
   return (
     <div>
       <div className="titleText">
-        <h1 className="title">Write a cover letter for the job.</h1>
-        <p className="description">
-          Paste your resume and the job description. Get back a tailored cover
-          letter that draws from your real experience.
-        </p>
+        <h1 className="title">{text.title}</h1>
+        <p className="description">{text.description}</p>
       </div>
 
-      <ResumeInput value={resume} onChange={setResume} mode="coverLetter" />
+      <ResumeInput value={resume} onChange={setResume} mode="coverLetter" language={language} />
 
       <div className="actionRow">
         <SubmitBtn
@@ -67,10 +67,10 @@ export default function CoverLetterTailor({ jobDescription }: TailorProps) {
           loading={status === "loading"}
           label={buttonLabel}
         />
-        <span className="actionHint">results appear below</span>
+        <span className="actionHint">{text.actionHint}</span>
       </div>
 
-      {status === "loading" && <LoadingSpinner />}
+      {status === "loading" && <LoadingSpinner language={language} />}
       {status === "done" && result !== null && (
         <ParagraphOutPutPanel
           result={result}
@@ -79,6 +79,7 @@ export default function CoverLetterTailor({ jobDescription }: TailorProps) {
           onRefine={handleRefine}
           refining={refining}
           mode="coverLetter"
+          language={language}
         />
       )}
     </div>

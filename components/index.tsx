@@ -5,6 +5,7 @@ export { default as SubmitBtn } from "./submitBtn";
 export { default as LoadingSpinner } from "./LoadingSpinner";
 export { default as BulletTailor } from "./BulletTailor";
 export { default as TabBar } from "./TabBar";
-export { default as CvTailor } from "./CvTailor";
+export { default as CoverLetterTailor } from "./coverLetterTailor";
 export { default as SummaryTailor } from "./SummaryTailor";
 export { default as ParagraphOutPutPanel } from "./ParagraphOutPutPanel"
+export { default as LanguageToggle } from "./LanguageToggle"
