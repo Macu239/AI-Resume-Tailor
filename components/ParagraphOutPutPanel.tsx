@@ -1,4 +1,5 @@
-import { TailorResult, Tab } from "@/types";
+import { TailorResult, Language } from "@/types";
+import { translations } from "@/lib/translations";
 import { useState, useCallback } from "react";
 import "./ParagraphOutPutPanel.css";
 
@@ -8,25 +9,8 @@ type ParagraphOutPutPanelProps = {
   onRefinementChange: (value: string) => void;
   onRefine: () => void;
   refining: boolean;
-  mode: Tab;
-};
-
-const config: Record<Tab, { title: string; refinePlaceHolder: string; refineBtn: string }> = {
-  bullet: {
-    title: "",
-    refinePlaceHolder: "",
-    refineBtn: "",
-  },
-  summary: {
-    title: "Tailored Summary:",
-    refinePlaceHolder: "Make sure to mention Javascript",
-    refineBtn: "Refine Summary",
-  },
-  coverLetter: {
-    title: "Tailored Cover Letter:",
-    refinePlaceHolder: "Highlight the GPA calculator",
-    refineBtn: "Refine Cover Letter",
-  },
+  mode: "summary" | "coverLetter";
+  language: Language;
 };
 
 export default function ParagraphOutPutPanel({
@@ -36,6 +20,7 @@ export default function ParagraphOutPutPanel({
   onRefine,
   refining,
   mode,
+  language,
 }: ParagraphOutPutPanelProps) {
   const [copied, setCopied] = useState<boolean | null>(null);
   const copy = useCallback((text: string) => {
@@ -43,30 +28,31 @@ export default function ParagraphOutPutPanel({
     setCopied(true);
     setTimeout(() => setCopied(null), 1300);
   }, []);
-  const { title, refinePlaceHolder, refineBtn } = config[mode];
+  const { title, refinePlaceholder, refineBtn, refiningLabel } = translations[language].paragraphOutput[mode];
+  const { colOriginal, colRewritten, refineLabel, copyLabel, copiedLabel } = translations[language].output;
   return (
     <div className="ParagraphOutPutPanelContainer">
       <span className="ParagraphOutPutPanelTitle">{title}</span>
       <div className="columnHeaders">
-        <span className="colHeader colOriginal">Original</span>
-        <span className="colHeader colRewritten">Rewritten</span>
+        <span className="colHeader colOriginal">{colOriginal}</span>
+        <span className="colHeader colRewritten">{colRewritten}</span>
       </div>
       <div className="ParagraphOutPutresult">
         <p className="cellOriginal">{result.original}</p>
         <div className="cellRewritten">
           <p>{result.rewritten}</p>
           <button className="copyRowBtn" onClick={() => copy(result.rewritten)}>
-            {copied ? "copied" : "copy"}
+            {copied ? copiedLabel : copyLabel}
           </button>
         </div>
       </div>
       <div className="refineSection">
-        <span className="refineLabel">Refine</span>
+        <span className="refineLabel">{refineLabel}</span>
         <textarea
           className="refineTextarea"
           value={refinement}
           onChange={(e) => onRefinementChange(e.target.value)}
-          placeholder={refinePlaceHolder}
+          placeholder={refinePlaceholder}
           rows={2}
           disabled={refining}
         />
@@ -76,7 +62,7 @@ export default function ParagraphOutPutPanel({
             onClick={onRefine}
             disabled={refining || !refinement.trim()}
           >
-            {refining ? "Refining..." : refineBtn}
+            {refining ? refiningLabel : refineBtn}
           </button>
         </div>
       </div>

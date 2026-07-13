@@ -1,6 +1,7 @@
 "use client";
 import { useState, useCallback } from "react";
-import { TailorResult } from "@/types";
+import { TailorResult, Language } from "@/types";
+import { translations } from "@/lib/translations";
 import "./BulletOutPutPanel.css";
 
 type ResultsPanelProps = {
@@ -9,6 +10,7 @@ type ResultsPanelProps = {
   onRefinementChange: (value: string) => void;
   onRefine: () => void;
   refining: boolean;
+  language: Language;
 };
 
 export default function ResultsPanel({
@@ -17,6 +19,7 @@ export default function ResultsPanel({
   onRefinementChange,
   onRefine,
   refining,
+  language,
 }: ResultsPanelProps) {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [copiedAll, setCopiedAll] = useState(false);
@@ -34,18 +37,22 @@ export default function ResultsPanel({
     setTimeout(() => setCopiedAll(false), 1300);
   }, [results]);
 
+  const { colOriginal, colRewritten, refineLabel, copyLabel, copiedLabel } = translations[language].output;
+  const { title, copyAllLabel, footnote, refinePlaceholder, refineBtn, refiningLabel } =
+    translations[language].bulletOutput;
+
   return (
     <div className="resultsPanelContainer">
       <div className="resultsPanelTopRow">
-        <span className="resultsPanelTitle">Tailored bullets</span>
+        <span className="resultsPanelTitle">{title}</span>
         <button className="copyAllBtn" onClick={copyAll}>
-          {copiedAll ? "copied" : "copy all"}
+          {copiedAll ? copiedLabel : copyAllLabel}
         </button>
       </div>
 
       <div className="columnHeaders">
-        <span className="colHeader colOriginal">Original</span>
-        <span className="colHeader colRewritten">Rewritten</span>
+        <span className="colHeader colOriginal">{colOriginal}</span>
+        <span className="colHeader colRewritten">{colRewritten}</span>
       </div>
 
       {results.map((bullet, index) => (
@@ -61,23 +68,23 @@ export default function ResultsPanel({
               className="copyRowBtn"
               onClick={() => copyRow(bullet.rewritten, index)}
             >
-              {copiedIndex === index ? "copied" : "copy"}
+              {copiedIndex === index ? copiedLabel : copyLabel}
             </button>
           </div>
         </div>
       ))}
 
       <p className="resultsFootnote">
-        {results.length} of {results.length} rewritten
+        {footnote.replace(/\{count\}/g, String(results.length))}
       </p>
 
       <div className="refineSection">
-        <span className="refineLabel">Refine</span>
+        <span className="refineLabel">{refineLabel}</span>
         <textarea
           className="refineTextarea"
           value={refinement}
           onChange={(e) => onRefinementChange(e.target.value)}
-          placeholder="Shorter, more precise on Python, emphasize leadership..."
+          placeholder={refinePlaceholder}
           rows={2}
           disabled={refining}
         />
@@ -87,7 +94,7 @@ export default function ResultsPanel({
             onClick={onRefine}
             disabled={refining || !refinement.trim()}
           >
-            {refining ? "Refining..." : "Refine bullets"}
+            {refining ? refiningLabel : refineBtn}
           </button>
         </div>
       </div>

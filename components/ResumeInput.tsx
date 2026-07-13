@@ -1,33 +1,17 @@
 "use client";
 import "./ResumeInput.css";
-import { Tab } from "@/types";
+import { Tab, Language } from "@/types";
+import { translations } from "@/lib/translations";
 
 type ResumeInputProps = {
   value: string;
   onChange: (value: string) => void;
   mode: Tab;
+  language: Language;
 };
-
-const config: Record<Tab, { label: string; meta: string; placeholder: string }> = {
-  bullet: {
-    label: "Resume Bullets",
-    meta: "one per line",
-    placeholder: "- Led a team of 5 engineers...",
-  },
-  summary: {
-    label: "Professional Summary",
-    meta: "1-3 sentences",
-    placeholder: "Experienced software engineer with 3+ years building...",
-  },
-  coverLetter: {
-    label: "Whole Resume",
-    meta: "paste full Resume",
-    placeholder: "Paste your full Resume here...",
-  },
-};
-
-export default function ResumeInput({ value, onChange, mode }: ResumeInputProps) {
-  const { label, meta, placeholder } = config[mode];
+  
+export default function ResumeInput({ value, onChange, mode, language }: ResumeInputProps) {
+  const { label, meta, placeholder } = translations[language].resumeInput[mode];
   return (
     <div className="ResumeInputContainer">
       <div className="inputLabelRow">

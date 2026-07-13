@@ -1,12 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
+import { Language } from "@/types";
+import { translations } from "@/lib/translations";
 import "./LoadingSpinner.css";
-
-const steps = [
-  "Reading the job description",
-  "Matching keywords and skills",
-  "Rewriting your bullets",
-];
 
 const skeletonRows = [
   { left: "90%", left2: "52%", right: "100%", right2: "68%" },
@@ -14,8 +10,13 @@ const skeletonRows = [
   { left: "92%", left2: "48%", right: "88%",  right2: "72%" },
 ];
 
-export default function LoadingSpinner() {
+type LoadingSpinnerProps = {
+  language: Language;
+};
+
+export default function LoadingSpinner({ language }: LoadingSpinnerProps) {
   const [stepIndex, setStepIndex] = useState(0);
+  const steps = translations[language].loadingSpinner.steps;
 
   useEffect(() => {
     const interval = setInterval(() => {

@@ -1,12 +1,15 @@
-import { Tab } from "@/types";
+import { Tab, Language } from "@/types";
+import { translations } from "@/lib/translations";
 import "./tabBar.css";
 
 type TabBarProps = {
   tool: Tab;
   setTool: (tab: Tab) => void;
+  language: Language;
 };
 
-export default function TabBar({ tool, setTool }: TabBarProps) {
+export default function TabBar({ tool, setTool, language }: TabBarProps) {
+  const { bullet, coverLetter, summary } = translations[language].tabbar;
   return (
     <div className="tabBar" role="tablist">
       <button
@@ -15,7 +18,7 @@ export default function TabBar({ tool, setTool }: TabBarProps) {
         aria-selected={tool === "bullet"}
         onClick={() => setTool("bullet")}
       >
-        Bullet Tailor
+        {bullet}
       </button>
       <button
         className={tool === "coverLetter" ? "tab active" : "tab"}
@@ -23,7 +26,7 @@ export default function TabBar({ tool, setTool }: TabBarProps) {
         aria-selected={tool === "coverLetter"}
         onClick={() => setTool("coverLetter")}
       >
-        Cover Letter
+        {coverLetter}
       </button>
       <button
         className={tool === "summary" ? "tab active" : "tab"}
@@ -31,7 +34,7 @@ export default function TabBar({ tool, setTool }: TabBarProps) {
         aria-selected={tool === "summary"}
         onClick={() => setTool("summary")}
       >
-        Summary Tailor
+        {summary}
       </button>
     </div>
   );
