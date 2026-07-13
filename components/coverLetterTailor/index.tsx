@@ -8,7 +8,7 @@ import {
 import { TailorProps, TailorResult } from "@/types";
 import { translations } from "@/lib/translations";
 import { useState } from "react";
-import "./Cv.css";
+import "./Coverletter.css";
 
 export default function CoverLetterTailor({ jobDescription, language }: TailorProps) {
   const [resume, setResume] = useState("");
