@@ -13,9 +13,9 @@ describe("TabBar", () => {
   });
   it("marks bullet as pressed when tool is bullet", () => {
     render(<TabBar tool="bullet" setTool={vi.fn()} language="en" />);
-    expect(screen.getByText("Bullet Points").getAttribute("aria-selected")).toBe(
-      "true",
-    );
+    expect(
+      screen.getByText("Bullet Points").getAttribute("aria-selected"),
+    ).toBe("true");
     expect(screen.getByText("Summary").getAttribute("aria-selected")).toBe(
       "false",
     );
@@ -26,9 +26,9 @@ describe("TabBar", () => {
 
   it("marks summary as pressed when tool is summary", () => {
     render(<TabBar tool="summary" setTool={vi.fn()} language="en" />);
-    expect(screen.getByText("Bullet Points").getAttribute("aria-selected")).toBe(
-      "false",
-    );
+    expect(
+      screen.getByText("Bullet Points").getAttribute("aria-selected"),
+    ).toBe("false");
     expect(screen.getByText("Summary").getAttribute("aria-selected")).toBe(
       "true",
     );
@@ -39,9 +39,9 @@ describe("TabBar", () => {
 
   it("marks cover letter as pressed when tool is coverLetter", () => {
     render(<TabBar tool="coverLetter" setTool={vi.fn()} language="en" />);
-    expect(screen.getByText("Bullet Points").getAttribute("aria-selected")).toBe(
-      "false",
-    );
+    expect(
+      screen.getByText("Bullet Points").getAttribute("aria-selected"),
+    ).toBe("false");
     expect(screen.getByText("Summary").getAttribute("aria-selected")).toBe(
       "false",
     );
