@@ -1,0 +1,8 @@
+.claude
+.github
+.next
+node_modules
+.git
+.env*
+Dockerfile
+.dockerignore

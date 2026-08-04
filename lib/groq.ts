@@ -47,9 +47,17 @@ Only return JSON, no extra text.`,
 }`,
 };
 
-const client = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+let client: Groq | null = null;
+
+/** Lazily constructs the Groq client so importing this module doesn't require GROQ_API_KEY to be set (e.g. during build-time page-data collection). */
+function getClient() {
+  if (!client) {
+    client = new Groq({
+      apiKey: process.env.GROQ_API_KEY,
+    });
+  }
+  return client;
+}
 
 /** Strips markdown code fences before parsing model JSON output. */
 function parseJSON(content: string) {
@@ -66,7 +74,7 @@ export async function tailorBullets(
   jobDescription: string,
   language: Language = "en",
 ) {
-  const response = await client.chat.completions.create({
+  const response = await getClient().chat.completions.create({
     model: "llama-3.3-70b-versatile",
     response_format: { type: "json_object" },
     messages: [
@@ -127,7 +135,7 @@ export async function refineBullet(
   instruction: string,
   language: Language = "en",
 ) {
-  const response = await client.chat.completions.create({
+  const response = await getClient().chat.completions.create({
     model: "llama-3.3-70b-versatile",
     response_format: { type: "json_object" },
     messages: [
@@ -189,7 +197,7 @@ export async function tailorSummary(
   jobDescription: string,
   language: Language = "en",
 ) {
-  const response = await client.chat.completions.create({
+  const response = await getClient().chat.completions.create({
     model: "llama-3.3-70b-versatile",
     response_format: { type: "json_object" },
     messages: [
@@ -244,7 +252,7 @@ export async function refineSummary(
   instruction: string,
   language: Language = "en",
 ) {
-  const response = await client.chat.completions.create({
+  const response = await getClient().chat.completions.create({
     model: "llama-3.3-70b-versatile",
     response_format: { type: "json_object" },
     messages: [
@@ -307,7 +315,7 @@ export async function tailorCoverLetter(
   jobDescription: string,
   language: Language = "en",
 ) {
-  const response = await client.chat.completions.create({
+  const response = await getClient().chat.completions.create({
     model: "llama-3.3-70b-versatile",
     response_format: { type: "json_object" },
     messages: [
@@ -362,7 +370,7 @@ export async function refineCoverLetter(
   instruction: string,
   language: Language = "en",
 ) {
-  const response = await client.chat.completions.create({
+  const response = await getClient().chat.completions.create({
     model: "llama-3.3-70b-versatile",
     response_format: { type: "json_object" },
     messages: [
