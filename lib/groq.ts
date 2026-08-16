@@ -1,6 +1,8 @@
 import Groq from "groq-sdk";
 import { TailorResult, Language } from "@/types";
 
+const MODEL = "openai/gpt-oss-20b";
+
 const tailorBulletsPrompt: Record<Language, string> = {
   en: `You are an expert resume writer.
 The user will give you their resume bullets and a job description.
@@ -75,7 +77,7 @@ export async function tailorBullets(
   language: Language = "en",
 ) {
   const response = await getClient().chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: MODEL,
     response_format: { type: "json_object" },
     messages: [
       {
@@ -136,7 +138,7 @@ export async function refineBullet(
   language: Language = "en",
 ) {
   const response = await getClient().chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: MODEL,
     response_format: { type: "json_object" },
     messages: [
       {
@@ -198,7 +200,7 @@ export async function tailorSummary(
   language: Language = "en",
 ) {
   const response = await getClient().chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: MODEL,
     response_format: { type: "json_object" },
     messages: [
       {
@@ -253,7 +255,7 @@ export async function refineSummary(
   language: Language = "en",
 ) {
   const response = await getClient().chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: MODEL,
     response_format: { type: "json_object" },
     messages: [
       {
@@ -316,7 +318,7 @@ export async function tailorCoverLetter(
   language: Language = "en",
 ) {
   const response = await getClient().chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: MODEL,
     response_format: { type: "json_object" },
     messages: [
       {
@@ -371,7 +373,7 @@ export async function refineCoverLetter(
   language: Language = "en",
 ) {
   const response = await getClient().chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: MODEL,
     response_format: { type: "json_object" },
     messages: [
       {
