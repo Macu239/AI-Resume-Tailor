@@ -1,11 +1,10 @@
 import { RefineSingleRequest } from "@/types";
 import { refineCoverLetter } from "@/lib/groq";
-import { getClientIp, ratelimit } from "@/lib/ratelimit";
+import { isRateLimited } from "@/lib/ratelimit";
 
 export async function POST(request: Request) {
   try {
-    const { success } = await ratelimit.limit(getClientIp(request));
-    if (!success) {
+    if (await isRateLimited(request)) {
       return Response.json({ error: "Too many requests, slow down." }, { status: 429 });
     }
 
