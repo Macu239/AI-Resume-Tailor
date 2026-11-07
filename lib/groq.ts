@@ -192,6 +192,7 @@ Writing rules:
 - Write in implied first person: no "I", "my", or the candidate's name.
 - Keep it to 2-4 sentences (roughly 50-90 words).
 - Never invent experience, skills, employers, titles, or metrics that are not in the resume content.
+- Describe the candidate at their true level: never inflate seniority, years of experience, or industry background. The job description describes the employer, not the candidate, so never present its industry, requirements, or skills as the candidate's experience unless the resume content shows them.
 - Return the resume content unchanged in "original".
 
 Respond in this exact JSON format:
@@ -216,6 +217,7 @@ Only return JSON, no extra text.`,
 - 不使用「我」或候選人姓名，採用履歷慣用的省略主詞寫法。
 - 控制在 2 到 4 句話之間（約 80 到 150 字）。
 - 不得捏造履歷內容中不存在的經驗、技能、公司、職稱或數據。
+- 依候選人的真實資歷撰寫，不得誇大職級、年資或產業背景。職缺描述說明的是應徵公司而非候選人，除非履歷內容中有相應事實，否則不得將職缺的產業、需求或技能寫成候選人的經驗。
 - original 欄位須原樣回傳使用者提供的履歷內容。
 - 使用專業、自然且符合 ATS 最佳化的繁體中文履歷寫作風格。
 
@@ -270,6 +272,7 @@ Writing rules:
 - Use confident, active, results-focused language. Cut filler and cliches ("hard-working", "team player", "passionate", "detail-oriented", "results-driven") unless they are proven by specific evidence.
 - Write in implied first person: no "I", "my", or the candidate's name.
 - Keep it to 2-4 sentences (roughly 50-90 words) unless the instruction says otherwise.
+- Describe the candidate at their true level: never inflate seniority, years of experience, or industry background.
 - Never invent experience, skills, employers, titles, or metrics that are not in the source material. If the instruction asks for something the facts cannot support, apply it only as far as the facts allow.
 - The instruction overrides these style rules, but never the no-fabrication rule.
 - Keep "original" exactly as provided.
@@ -295,6 +298,7 @@ Only return JSON, no extra text.`,
 - 使用自信、主動、以成果為導向的語氣。除非有具體證據支持，否則刪除空泛用語，例如「認真負責」、「具團隊精神」、「充滿熱情」、「學習能力強」、「抗壓性高」。
 - 不使用「我」或候選人姓名，採用履歷慣用的省略主詞寫法。
 - 除非指令另有說明，否則控制在 2 到 4 句話之間（約 80 到 150 字）。
+- 依候選人的真實資歷撰寫，不得誇大職級、年資或產業背景。
 - 不得捏造原始素材中不存在的經驗、技能、公司、職稱或數據。若指令要求的內容無法由事實支撐，僅在事實允許的範圍內調整。
 - 精修指令的優先順序高於上述寫作風格規則，但不得違反禁止捏造的規則。
 - original 欄位必須維持原樣，不得修改。
@@ -352,6 +356,7 @@ Writing rules:
 - Naturally integrate key requirements and keywords from the job description. Never keyword-stuff.
 - Avoid cliches and generic flattery ("I am a hard-working team player", "your esteemed company").
 - Never invent experience, skills, employers, metrics, or facts about the company.
+- Describe the candidate at their true level: never inflate seniority, years of experience, or industry background. The job description describes the employer, not the candidate, so never present its industry, requirements, or skills as the candidate's experience unless the resume shows them.
 - Do not include a salutation, date, or sign-off. Body paragraphs only.
 - Return the resume unchanged in "original".
 
@@ -378,6 +383,7 @@ Only return JSON, no extra text.`,
 - 自然融入職缺描述中的關鍵需求與關鍵字，不得刻意堆砌。
 - 避免陳腔濫調與空泛的恭維，例如「本人認真負責、具團隊精神」、「貴公司聲譽卓著」。
 - 不得捏造任何經驗、技能、公司經歷、數據或關於應徵公司的資訊。
+- 依候選人的真實資歷撰寫，不得誇大職級、年資或產業背景。職缺描述說明的是應徵公司而非候選人，除非履歷中有相應事實，否則不得將職缺的產業、需求或技能寫成候選人的經驗。
 - 不得包含稱謂、日期或署名，僅輸出正文段落。
 - original 欄位須原樣回傳使用者提供的履歷。
 - 使用專業、自然的繁體中文寫作風格。
@@ -427,6 +433,7 @@ Apply the instruction to improve the cover letter, following these rules:
 - Keep the structure of opening hook, why I fit, why this company, and call to action, in 3-4 short paragraphs separated by a blank line, unless the instruction says otherwise.
 - Keep a professional, warm, and confident first-person tone and specific evidence from the resume.
 - You may draw new evidence from the resume, but never invent experience, skills, employers, metrics, or facts about the company.
+- Describe the candidate at their true level: never inflate seniority, years of experience, or industry background.
 - The instruction overrides these style rules, but never the no-fabrication rule. If the instruction asks for something the facts cannot support, apply it only as far as the facts allow.
 - Do not add a salutation, date, or sign-off.
 - Keep "original" exactly as provided.
@@ -447,6 +454,7 @@ Only return JSON, no extra text.`,
 - 除非指令另有說明，否則須維持「開場吸引段落、為何適合此職位、為何選擇這間公司、行動呼籲」的結構，分為 3 到 4 個簡短段落，段落之間以空行分隔。
 - 維持第一人稱、專業、親切且自信的語氣，並以履歷中的具體證據支撐內容。
 - 可從履歷中引用新的證據，但不得捏造任何經驗、技能、公司經歷、數據或關於應徵公司的資訊。
+- 依候選人的真實資歷撰寫，不得誇大職級、年資或產業背景。
 - 精修指令的優先順序高於上述寫作風格規則，但不得違反禁止捏造的規則。若指令要求的內容無法由事實支撐，僅在事實允許的範圍內調整。
 - 不得加入稱謂、日期或署名。
 - original 欄位（原始履歷）必須維持原樣，不得修改。
