@@ -1,5 +1,5 @@
 import { TailorRequest } from "@/types";
-import { tailorCoverLetter } from "@/lib/groq";
+import { tailorCoverLetter, isGroqRateLimit } from "@/lib/groq";
 import { isRateLimited } from "@/lib/ratelimit";
 
 export async function POST(request: Request) {
@@ -13,6 +13,9 @@ export async function POST(request: Request) {
     return Response.json(result);
   } catch (err) {
     console.error("[tailor-cv]", err);
+    if (isGroqRateLimit(err)) {
+      return Response.json({ error: "The AI service is busy, please try again in a minute." }, { status: 429 });
+    }
     return Response.json({ error: "Failed to generate CV" }, { status: 500 });
   }
 }

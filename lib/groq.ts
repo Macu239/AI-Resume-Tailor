@@ -77,29 +77,67 @@ function parseJSON(content: string) {
   return JSON.parse(cleaned);
 }
 
+/** Output token cap per call. gpt-oss reasons before answering and that reasoning counts toward this cap, so it must leave room for the full JSON reply. */
+const MAX_COMPLETION_TOKENS = 8192;
+
+/**
+ * Checks whether an error is Groq rejecting the model's output as invalid JSON.
+ * @param err - The error thrown by the Groq SDK.
+ * @returns True if Groq returned a json_validate_failed error.
+ */
+function isJsonValidateError(err: unknown): boolean {
+  const e = err as { status?: number; error?: { error?: { code?: string } } };
+  return e?.status === 400 && e.error?.error?.code === "json_validate_failed";
+}
+
+/**
+ * Checks whether an error is Groq's own rate limit, as opposed to this app's limiter.
+ * @param err - The error thrown by the Groq SDK.
+ * @returns True if Groq responded with HTTP 429.
+ */
+export function isGroqRateLimit(err: unknown): boolean {
+  return (err as { status?: number })?.status === 429;
+}
+
+/**
+ * Sends a system prompt and user message to the model and parses its JSON reply.
+ * Retries once when Groq rejects the output as invalid JSON, which gpt-oss occasionally produces.
+ * @param systemPrompt - The system instructions for the task.
+ * @param userContent - The user message containing the resume data.
+ * @returns The parsed JSON object from the model.
+ */
+async function complete(systemPrompt: string, userContent: string) {
+  const request = () =>
+    getClient().chat.completions.create({
+      model: MODEL,
+      response_format: { type: "json_object" },
+      max_completion_tokens: MAX_COMPLETION_TOKENS,
+      reasoning_effort: "low",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userContent },
+      ],
+    });
+
+  const response = await request().catch((err) => {
+    if (!isJsonValidateError(err)) throw err;
+    return request();
+  });
+
+  const content = response.choices[0].message.content ?? "";
+  return parseJSON(content);
+}
+
 //Bullets
 export async function tailorBullets(
   resume: string,
   jobDescription: string,
   language: Language = "en",
 ) {
-  const response = await getClient().chat.completions.create({
-    model: MODEL,
-    response_format: { type: "json_object" },
-    messages: [
-      {
-        role: "system",
-        content: tailorBulletsPrompt[language],
-      },
-      {
-        role: "user",
-        content: `Job Description:\n${jobDescription}\n\nResume Bullets:\n${resume}`,
-      },
-    ],
-  });
-
-  const content = response.choices[0].message.content ?? "";
-  return parseJSON(content);
+  return complete(
+    tailorBulletsPrompt[language],
+    `Job Description:\n${jobDescription}\n\nResume Bullets:\n${resume}`,
+  );
 }
 
 const refineBulletPrompt: Record<Language, string> = {
@@ -156,23 +194,10 @@ export async function refineBullet(
   instruction: string,
   language: Language = "en",
 ) {
-  const response = await getClient().chat.completions.create({
-    model: MODEL,
-    response_format: { type: "json_object" },
-    messages: [
-      {
-        role: "system",
-        content: refineBulletPrompt[language],
-      },
-      {
-        role: "user",
-        content: `Previous Results:\n${JSON.stringify(results)}\n\nInstruction:\n${instruction}`,
-      },
-    ],
-  });
-
-  const content = response.choices[0].message.content ?? "";
-  return parseJSON(content);
+  return complete(
+    refineBulletPrompt[language],
+    `Previous Results:\n${JSON.stringify(results)}\n\nInstruction:\n${instruction}`,
+  );
 }
 
 //Summary
@@ -236,23 +261,10 @@ export async function tailorSummary(
   jobDescription: string,
   language: Language = "en",
 ) {
-  const response = await getClient().chat.completions.create({
-    model: MODEL,
-    response_format: { type: "json_object" },
-    messages: [
-      {
-        role: "system",
-        content: tailorSummaryPrompt[language],
-      },
-      {
-        role: "user",
-        content: `Job Description:\n${jobDescription}\n\nResume Summary:\n${resume}`,
-      },
-    ],
-  });
-
-  const content = response.choices[0].message.content ?? "";
-  return parseJSON(content);
+  return complete(
+    tailorSummaryPrompt[language],
+    `Job Description:\n${jobDescription}\n\nResume Summary:\n${resume}`,
+  );
 }
 
 const refineSummaryPrompt: Record<Language, string> = {
@@ -319,23 +331,10 @@ export async function refineSummary(
   instruction: string,
   language: Language = "en",
 ) {
-  const response = await getClient().chat.completions.create({
-    model: MODEL,
-    response_format: { type: "json_object" },
-    messages: [
-      {
-        role: "system",
-        content: refineSummaryPrompt[language],
-      },
-      {
-        role: "user",
-        content: `Previous Result:\n${JSON.stringify(result)}\n\nInstruction:\n${instruction}`,
-      },
-    ],
-  });
-
-  const content = response.choices[0].message.content ?? "";
-  return parseJSON(content);
+  return complete(
+    refineSummaryPrompt[language],
+    `Previous Result:\n${JSON.stringify(result)}\n\nInstruction:\n${instruction}`,
+  );
 }
 
 //Cover Letter
@@ -403,23 +402,10 @@ export async function tailorCoverLetter(
   jobDescription: string,
   language: Language = "en",
 ) {
-  const response = await getClient().chat.completions.create({
-    model: MODEL,
-    response_format: { type: "json_object" },
-    messages: [
-      {
-        role: "system",
-        content: tailorCoverLetterPrompt[language],
-      },
-      {
-        role: "user",
-        content: `Job Description:\n${jobDescription}\n\nResume:\n${resume}`,
-      },
-    ],
-  });
-
-  const content = response.choices[0].message.content ?? "";
-  return parseJSON(content);
+  return complete(
+    tailorCoverLetterPrompt[language],
+    `Job Description:\n${jobDescription}\n\nResume:\n${resume}`,
+  );
 }
 
 const refineCoverLetterPrompt: Record<Language, string> = {
@@ -474,21 +460,8 @@ export async function refineCoverLetter(
   instruction: string,
   language: Language = "en",
 ) {
-  const response = await getClient().chat.completions.create({
-    model: MODEL,
-    response_format: { type: "json_object" },
-    messages: [
-      {
-        role: "system",
-        content: refineCoverLetterPrompt[language],
-      },
-      {
-        role: "user",
-        content: `Previous Result:\n${JSON.stringify(result)}\n\nInstruction:\n${instruction}`,
-      },
-    ],
-  });
-
-  const content = response.choices[0].message.content ?? "";
-  return parseJSON(content);
+  return complete(
+    refineCoverLetterPrompt[language],
+    `Previous Result:\n${JSON.stringify(result)}\n\nInstruction:\n${instruction}`,
+  );
 }

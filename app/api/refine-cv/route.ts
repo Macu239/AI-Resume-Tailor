@@ -1,5 +1,5 @@
 import { RefineSingleRequest } from "@/types";
-import { refineCoverLetter } from "@/lib/groq";
+import { refineCoverLetter, isGroqRateLimit } from "@/lib/groq";
 import { isRateLimited } from "@/lib/ratelimit";
 
 export async function POST(request: Request) {
@@ -13,6 +13,9 @@ export async function POST(request: Request) {
     return Response.json(result);
   } catch (err) {
     console.error("[refine-cv]", err);
+    if (isGroqRateLimit(err)) {
+      return Response.json({ error: "The AI service is busy, please try again in a minute." }, { status: 429 });
+    }
     return Response.json({ error: "Failed to refine CV" }, { status: 500 });
   }
 }

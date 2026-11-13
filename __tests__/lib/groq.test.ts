@@ -6,6 +6,7 @@ import {
   refineSummary,
   tailorCoverLetter,
   refineCoverLetter,
+  isGroqRateLimit,
 } from "@/lib/groq";
 import { TailorResult } from "@/types";
 
@@ -198,5 +199,47 @@ describe("refineCoverLetter", () => {
     await refineCoverLetter(previous, "More formal tone", "zh");
 
     expectMandarinPrompt();
+  });
+});
+
+/** Builds an error shaped like the Groq SDK's APIError. */
+function groqError(status: number, code: string) {
+  return Object.assign(new Error(code), { status, error: { error: { code } } });
+}
+
+describe("Groq request handling", () => {
+  it("sends an output token cap and low reasoning effort", async () => {
+    mockCreate.mockResolvedValue(mockResponse(JSON.stringify({ results: [] })));
+
+    await tailorBullets("resume", "job desc");
+
+    const params = mockCreate.mock.calls[0][0];
+    expect(params.max_completion_tokens).toBe(8192);
+    expect(params.reasoning_effort).toBe("low");
+  });
+
+  it("retries once when Groq rejects the output as invalid JSON", async () => {
+    const payload = { results: [{ original: "a", rewritten: "b" }] };
+    mockCreate
+      .mockRejectedValueOnce(groqError(400, "json_validate_failed"))
+      .mockResolvedValueOnce(mockResponse(JSON.stringify(payload)));
+
+    const result = await tailorBullets("resume", "job desc");
+
+    expect(result).toEqual(payload);
+    expect(mockCreate).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not retry other errors", async () => {
+    mockCreate.mockRejectedValue(groqError(429, "rate_limit_exceeded"));
+
+    await expect(tailorBullets("resume", "job desc")).rejects.toThrow("rate_limit_exceeded");
+    expect(mockCreate).toHaveBeenCalledOnce();
+  });
+
+  it("identifies Groq rate limit errors", () => {
+    expect(isGroqRateLimit(groqError(429, "rate_limit_exceeded"))).toBe(true);
+    expect(isGroqRateLimit(groqError(400, "json_validate_failed"))).toBe(false);
+    expect(isGroqRateLimit(new Error("network"))).toBe(false);
   });
 });
