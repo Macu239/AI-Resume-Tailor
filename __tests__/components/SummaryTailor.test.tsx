@@ -45,6 +45,7 @@ vi.stubGlobal("fetch", mockFetch);
 
 beforeEach(() => {
   mockFetch.mockReset();
+  localStorage.clear();
 });
 
 const fetchCases: [Language, string][] = [
@@ -130,4 +131,90 @@ describe("SummaryTailor fetching", () => {
       expect(sentBody.result).toEqual({ original: "x", rewritten: "y" });
     },
   );
+});
+
+const STORAGE_KEY = "summaryTailor.resume";
+
+describe("SummaryTailor localStorage", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  beforeEach(() => {
+    mockFetch.mockResolvedValue({
+      json: async () => ({ result: { original: "x", rewritten: "y" } }),
+    });
+  });
+
+  it("saves the resume when Tailor is clicked", async () => {
+    render(<SummaryTailor jobDescription="job desc" language="en" />);
+
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "my resume" } });
+    fireEvent.click(screen.getByText("Tailor Summary"));
+    await screen.findByText("Re-tailor");
+
+    expect(localStorage.getItem(STORAGE_KEY)).toBe("my resume");
+  });
+
+  it("loads the saved resume on mount", async () => {
+    localStorage.setItem(STORAGE_KEY, "saved resume");
+    render(<SummaryTailor jobDescription="job desc" language="en" />);
+
+    expect(await screen.findByDisplayValue("saved resume")).toBeDefined();
+  });
+
+  it("sends the loaded resume when submitted", async () => {
+    localStorage.setItem(STORAGE_KEY, "saved resume");
+    render(<SummaryTailor jobDescription="job desc" language="en" />);
+    await screen.findByDisplayValue("saved resume");
+
+    fireEvent.click(screen.getByText("Tailor Summary"));
+    await screen.findByText("Re-tailor");
+
+    const sentBody = JSON.parse(mockFetch.mock.calls[0][1].body);
+    expect(sentBody.resume).toBe("saved resume");
+  });
+
+  it("does not overwrite the saved resume when the input is blank", async () => {
+    localStorage.setItem(STORAGE_KEY, "saved resume");
+    render(<SummaryTailor jobDescription="job desc" language="en" />);
+    await screen.findByDisplayValue("saved resume");
+
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "   " } });
+    fireEvent.click(screen.getByText("Tailor Summary"));
+    await screen.findByText("Re-tailor");
+
+    expect(localStorage.getItem(STORAGE_KEY)).toBe("saved resume");
+  });
+
+  it("still tailors when saving to localStorage throws", async () => {
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new Error("QuotaExceededError");
+    });
+    render(<SummaryTailor jobDescription="job desc" language="en" />);
+
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "my resume" } });
+    fireEvent.click(screen.getByText("Tailor Summary"));
+    await screen.findByText("Re-tailor");
+
+    expect(mockFetch).toHaveBeenCalledOnce();
+    expect(screen.getByText("y")).toBeDefined();
+  });
+
+  it("renders an empty input when reading localStorage throws", () => {
+    vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+      throw new Error("SecurityError");
+    });
+    render(<SummaryTailor jobDescription="job desc" language="en" />);
+
+    expect((screen.getByRole("textbox") as HTMLTextAreaElement).value).toBe("");
+  });
+
+  it("resets the button to idle when the request fails", async () => {
+    mockFetch.mockRejectedValue(new Error("network"));
+    render(<SummaryTailor jobDescription="job desc" language="en" />);
+
+    fireEvent.click(screen.getByText("Tailor Summary"));
+    await screen.findByText("Tailoring...");
+
+    expect(await screen.findByText("Tailor Summary")).toBeDefined();
+  });
 });
